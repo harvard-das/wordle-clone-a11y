@@ -1,3 +1,10 @@
+:root {
+  --unused: hsl(200, 1%, 45%);
+  --wrong: hsl(240, 2%, 15%);
+  --wrong-location: hsl(49, 51%, 34%);
+  --correct: hsl(115, 29%, 39%);
+}
+
 *, *::after, *::before {
   box-sizing: border-box;
   font-family: Arial;
@@ -29,11 +36,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: hsl(
-    var(--hue, 200),
-    var(--saturation, 1%),
-    calc(var(--lightness-offset, 0%) + var(--lightness, 51%))
-  );
+  background-color: var(--unused);
   color: white;
   fill: white;
   text-transform: uppercase;
@@ -62,20 +65,16 @@ body {
 }
 
 .key.wrong {
-  --lightness: 23%;
+  background-color: var(--wrong);
 }
 
 .key.wrong-location {
-  --hue: 49;
-  --saturation: 51%;
-  --lightness: 47%;
+  background-color: var(--wrong-location);
   border: 2px dashed;
 }
 
 .key.correct {
-  --hue: 115;
-  --saturation: 29%;
-  --lightness: 43%;
+  background-color: var(--correct);
   border: 2px solid;
 }
 
@@ -109,17 +108,17 @@ body {
 
 .tile[data-state="wrong"] {
   border: none;
-  background-color: hsl(240, 2%, 23%);
+  background-color: var(--wrong);
 }
 
 .tile[data-state="wrong-location"] {
   border: 2px dashed;
-  background-color: hsl(49, 51%, 47%);
+  background-color: var(--wrong-location);
 }
 
 .tile[data-state="correct"] {
   border: 2px solid;
-  background-color: hsl(115, 29%, 43%);
+  background-color: var(--correct);
 }
 
 .tile.shake {
