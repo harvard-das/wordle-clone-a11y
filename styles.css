@@ -68,12 +68,14 @@ body {
   --hue: 49;
   --saturation: 51%;
   --lightness: 47%;
+  border: 2px dashed;
 }
 
 .key.correct {
   --hue: 115;
   --saturation: 29%;
   --lightness: 43%;
+  border: 2px solid;
 }
 
 .guess-grid {
@@ -110,12 +112,12 @@ body {
 }
 
 .tile[data-state="wrong-location"] {
-  border: none;
+  border: 2px dashed;
   background-color: hsl(49, 51%, 47%);
 }
 
 .tile[data-state="correct"] {
-  border: none;
+  border: 2px solid;
   background-color: hsl(115, 29%, 43%);
 }
 
