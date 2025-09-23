@@ -15330,6 +15330,8 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
+  e.preventDefault();
+
   if (e.key === "Enter") {
     submitGuess()
     return
