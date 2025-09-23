@@ -15402,12 +15402,15 @@ function flipTile(tile, index, array, guess) {
       if (targetWord[index] === letter) {
         tile.dataset.state = "correct"
         key.classList.add("correct")
+        key.querySelector('.vh').textContent = "correct"
       } else if (targetWord.includes(letter)) {
         tile.dataset.state = "wrong-location"
         key.classList.add("wrong-location")
+        key.querySelector('.vh').textContent = "present"
       } else {
         tile.dataset.state = "wrong"
         key.classList.add("wrong")
+        key.querySelector('.vh').textContent = "absent"
       }
 
       if (index === array.length - 1) {

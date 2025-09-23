@@ -46,10 +46,13 @@ body {
   grid-column: span 3;
 }
 
+.key > * {
+  pointer-events: none;
+}
+
 .key > svg {
   width: 1.75em;
   height: 1.75em;
-  pointer-events: none;
 }
 
 .key:hover, .key:focus {
