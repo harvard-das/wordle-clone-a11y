@@ -15330,19 +15330,20 @@ function handleMouseClick(e) {
 }
 
 function handleKeyPress(e) {
-  e.preventDefault();
-
   if (e.key === "Enter") {
+    e.preventDefault();
     submitGuess()
     return
   }
 
   if (e.key === "Backspace" || e.key === "Delete") {
+    e.preventDefault();
     deleteKey()
     return
   }
 
   if (e.key.match(/^[a-z]$/)) {
+    e.preventDefault();
     pressKey(e.key)
     return
   }
