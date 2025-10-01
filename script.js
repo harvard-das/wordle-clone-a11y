@@ -16,11 +16,17 @@ const guessGrid = document.querySelector("[data-guess-grid]")
 const params = new URLSearchParams(document.location.search)
 const paramName = 'game'
 let targetWord = 'zyzgy'
+let baseURL = 'https://harvard-das.github.io/wordle-clone-a11y/'
+
+if (location.hostname !== 'harvard-das.github.io') {
+  baseURL = `${location.origin}${location.pathname}`
+}
+
 if(params.get(paramName)) {
   targetWord = atob(params.get(paramName)).split(paramName)[0]
 }
 else {
-  location.assign(`${location.origin}${location.pathname}?${paramName}=${btoa(targetWord)}`)
+  location.assign(`${baseURL}?${paramName}=${btoa(targetWord)}`)
 }
 
 const newGame = document.getElementById('newgame')
@@ -36,10 +42,10 @@ newGame.addEventListener('formdata', (e) => {
   const entry = e.formData.get('newword')
   if (validateWord(entry)) {
     const word = btoa(entry)
-    const urlBase = `${location.origin}${location.pathname}?${paramName}=${word}`
+    const puzzleURL = `${baseURL}?${paramName}=${word}`
     const linkContainer = document.querySelector('.newpuzzle')
     const puzzleLink = document.querySelector('.newpuzzle > a[href]')
-    puzzleLink.href = urlBase;
+    puzzleLink.href = puzzleURL;
     linkContainer.classList.remove('no-visibility')
     puzzleLink.focus()
   }
