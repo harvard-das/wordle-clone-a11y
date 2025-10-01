@@ -18,10 +18,76 @@ body {
   background-color: var(--canvas);
   display: flex;
   flex-direction: column;
+  gap: .5rem;
   height: 100svh;
   margin: 0;
   padding: .25rem;
   font-size: clamp(.5rem, 4.5vmin, 1.5rem);
+}
+
+h1 {
+  font-size: clamp(1rem, 4.5vmin, 2rem);;
+  line-height: 1;
+  text-align: center;
+}
+
+header .settings button > * {
+  font-size: 1rem;
+  padding: .25rem;
+}
+
+button {
+  background-color: var(--unused);
+  color: var(--canvas-text);
+  fill: var(--canvas-text);
+  border: 1px solid;
+  font-size: inherit;
+  border-radius: .25em;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+button > * {
+  pointer-events: none;
+  z-index: 1;
+}
+
+button:hover > * {
+  color: var(--canvas);
+  fill: var(--canvas);
+}
+
+button:hover::after {
+  content: '';
+  background-color: var(--canvas-text);
+  border-radius: 4px;
+  position: absolute;
+  inset: 4px;
+  z-index: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--canvas-text);
+  outline-offset: 1px;
+}
+
+input {
+  background-color: inherit;
+  border: 1px solid;
+  color: inherit;
+  font-size: inherit;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .keyboard {
@@ -40,15 +106,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--unused);
-  color: var(--canvas-text);
-  fill: var(--canvas-text);
   text-transform: uppercase;
-  border-radius: .25em;
-  cursor: pointer;
-  position: relative;
-  user-select: none;
-  touch-action: manipulation;
 }
 
 .key.large {
@@ -56,33 +114,9 @@ body {
   grid-column: span 3;
 }
 
-.key > * {
-  pointer-events: none;
-  z-index: 1;
-}
-
 .key > svg {
   width: 1.75em;
   height: 1.75em;
-}
-
-.key:hover > * {
-  color: var(--canvas);
-  fill: var(--canvas);
-}
-
-.key:hover::after {
-  content: '';
-  background-color: var(--canvas-text);
-  border-radius: 4px;
-  position: absolute;
-  inset: 4px;
-  z-index: 0;
-}
-
-.key:focus-visible {
-  outline: 2px solid var(--canvas-text);
-  outline-offset: 1px;
 }
 
 .key.wrong {
@@ -104,8 +138,8 @@ body {
   justify-content: center;
   align-content: center;
   flex-grow: 1;
-  grid-template-columns: repeat(5, min(120px, 16vw));
-  grid-template-rows: repeat(6, min(120px, 16vw));
+  grid-template-columns: repeat(5, min(100px, 16vw));
+  grid-template-rows: repeat(6, min(100px, 16vw));
   gap: .25em;
   margin-bottom: 1em;
 }
@@ -119,6 +153,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  -webkit-user-select: none;
   user-select: none;
   transition: transform 250ms linear;
 }
@@ -221,6 +256,7 @@ body {
 .alert {
   pointer-events: none;
   background-color: hsl(204, 7%, 85%);
+  color: var(--canvas);
   padding: .75em;
   border-radius: .25em;
   opacity: 1;
@@ -244,4 +280,57 @@ body {
 	position: absolute;
 	white-space: nowrap;
 	width: 1px;
+}
+
+.no-visibility {
+  visibility: hidden;
+}
+
+dialog::backdrop {
+  background-color: rgb(0 0 0 / .5);
+}
+
+.dialog-flex {
+  display: flex;
+}
+
+.dialog-flex form[method="dialog"] {
+  order: 1;
+}
+
+#newgame {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+#newgame > * {
+  width: fit-content;
+}
+
+#newgame input {
+  --spacing: .25ch;
+  --invalid-bg: darkRed;
+  letter-spacing: var(--spacing);
+  margin-inline-end: 1rem;
+  padding-inline: var(--spacing);
+  text-transform: uppercase;
+  width: calc(10ch + var(--spacing));
+}
+
+#newgame input:user-invalid,
+#newgame input[aria-invalid="true"] {
+  background-color: var(--invalid-bg);
+  font-style: italic;
+}
+
+#newgame:blank {
+  background-color: green !important;
+}
+
+@supports not selector(:user-invalid) {
+  input:invalid {
+    background-color: var(--invalid-bg);
+    font-style: italic;
+  }
 }

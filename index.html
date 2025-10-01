@@ -1,83 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
   <title>Wordle Clone</title>
 </head>
+
 <body>
-  <div class="alert-container" data-alert-container></div>
-  <div data-guess-grid class="guess-grid">
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-    <div class="tile"></div>
-  </div>
-  <div data-keyboard class="keyboard">
-    <button type="button" class="key" data-key="Q"><span>Q</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="W"><span>W</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="E"><span>E</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="R"><span>R</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="T"><span>T</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="Y"><span>Y</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="U"><span>U</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="I"><span>I</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="O"><span>O</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="P"><span>P</span> <span class="vh"></span></button>
-    <div class="space"></div>
-    <button type="button" class="key" data-key="A"><span>A</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="S"><span>S</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="D"><span>D</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="F"><span>F</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="G"><span>G</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="H"><span>H</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="J"><span>J</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="K"><span>K</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="L"><span>L</span> <span class="vh"></span></button>
-    <div class="space"></div>
-    <button type="button" data-enter class="key large"><span>Enter</span></button>
-    <button type="button" class="key" data-key="Z"><span>Z</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="X"><span>X</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="C"><span>C</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="V"><span>V</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="B"><span>B</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="N"><span>N</span> <span class="vh"></span></button>
-    <button type="button" class="key" data-key="M"><span>M</span> <span class="vh"></span></button>
-    <button type="button" data-delete class="key large">
-      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-        <path fill="var(--color-tone-1)" d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"></path>
-      </svg>
-      <span class="vh">Delete</span>
-    </button>
-  </div>
+  <header>
+    <h1>Five-Letter Word Puzzle</h1>
+    <div class="settings">
+      <modal-btn>
+        <button command="show-modal" commandfor="create" popovertarget="create" aria-haspopup="dialog"
+          type="button"><span>Create Puzzle</span></button>
+      </modal-btn>
+
+      <dialog popover id="create" aria-modal="true" aria-labelledby="newlabel">
+        <div class="dialog-flex">
+          <form action="." method="dialog">
+            <button type="button" command="close" commandfor="create" popovertarget="create"
+              popovertargetaction="hide"><span>Close</span></button>
+          </form>
+          <form id="newgame" action="." novalidate>
+            <label for="newword" id="newlabel">New Five-Letter Puzzle Word</label>
+            <div>
+              <input id="newword" name="newword" type="text" maxlength="5" pattern="[a-Z]{5}" autofocus
+                aria-describedby="inputerror">
+              <span id="inputerror" role="status"></span>
+            </div>
+
+            <button type="submit"><span>Generate</span></button>
+            <div class="newpuzzle no-visibility">
+              <!-- http://huit-cwilcox-4.local:5500/?game=Y2xpY2tnYW1l -->
+              <a target="_blank" href=".">New Puzzle Link (opens in a new tab)</a>
+            </div>
+          </form>
+        </div>
+      </dialog>
+    </div>
+  </header>
+  <main>
+    <div class="alert-container" data-alert-container></div>
+    <div data-guess-grid class="guess-grid">
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+    </div>
+    <div data-keyboard class="keyboard">
+      <button type="button" class="key" data-key="Q"><span>Q</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="W"><span>W</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="E"><span>E</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="R"><span>R</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="T"><span>T</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="Y"><span>Y</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="U"><span>U</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="I"><span>I</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="O"><span>O</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="P"><span>P</span> <span class="vh"></span></button>
+      <div class="space"></div>
+      <button type="button" class="key" data-key="A"><span>A</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="S"><span>S</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="D"><span>D</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="F"><span>F</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="G"><span>G</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="H"><span>H</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="J"><span>J</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="K"><span>K</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="L"><span>L</span> <span class="vh"></span></button>
+      <div class="space"></div>
+      <button type="button" data-enter class="key large"><span>Enter</span></button>
+      <button type="button" class="key" data-key="Z"><span>Z</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="X"><span>X</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="C"><span>C</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="V"><span>V</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="B"><span>B</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="N"><span>N</span> <span class="vh"></span></button>
+      <button type="button" class="key" data-key="M"><span>M</span> <span class="vh"></span></button>
+      <button type="button" data-delete class="key large">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
+          <path fill="var(--color-tone-1)"
+            d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z">
+          </path>
+        </svg>
+        <span class="vh">Delete</span>
+      </button>
+    </div>
+  </main>
 </body>
+
 </html>

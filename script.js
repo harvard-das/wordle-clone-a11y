@@ -4,7 +4,6 @@ fetch('./dictionary.json')
   .then((response) => response.json())
   .then((data) => {
     wordDict = data
-    console.log(wordDict[1])
   })
 
 const WORD_LENGTH = 5
@@ -16,19 +15,70 @@ const guessGrid = document.querySelector("[data-guess-grid]")
 
 const params = new URLSearchParams(document.location.search)
 const paramName = 'game'
-const targetWord = atob(params.get(paramName)).split(paramName)[0]
+let targetWord = 'zyzgy'
+if(params.get(paramName)) {
+  targetWord = atob(params.get(paramName)).split(paramName)[0]
+}
+else {
+  location.assign(`${location.origin}/?${paramName}=${btoa(targetWord)}`)
+}
 
-const newGame = document.getElementById('newgame');
+const newGame = document.getElementById('newgame')
+const newWord = document.getElementById('newword')
+const inputError = document.getElementById('inputerror')
 
 newGame.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const newWord = btoa()
-  const urlBase = `${location.host}/?${paramName}=${newWord}`
-  const linkContainer = document.querySelector('.newpuzzle')
-  const puzzleLink = document.querySelector('.newpuzzle > a[href]')
-  puzzleLink.href = urlBase;
-  linkContainer.classList.remove('no-visibility')
+  e.preventDefault()
+  new FormData(newGame)
+})
+
+newGame.addEventListener('formdata', (e) => {
+  const entry = e.formData.get('newword')
+  if (validateWord(entry)) {
+    const word = btoa(entry)
+    const urlBase = `${location.origin}/?${paramName}=${word}`
+    const linkContainer = document.querySelector('.newpuzzle')
+    const puzzleLink = document.querySelector('.newpuzzle > a[href]')
+    puzzleLink.href = urlBase;
+    linkContainer.classList.remove('no-visibility')
+    puzzleLink.focus()
+  }
 });
+
+function wordLength(word) {
+  return word.length === WORD_LENGTH ? true : false
+}
+
+function wordValid(word) {
+  return wordDict.includes(word) ? true : false
+}
+
+function validateWord(entry) {
+  let errorText;
+
+  if (!wordLength(entry)) {
+    errorText = "Not five letters"
+  }
+  else if (!wordValid(entry)) {
+    errorText = `${entry.toUpperCase()} Not in word list`
+  }
+
+  if(errorText) {
+    inputError.textContent = errorText
+    newWord.ariaInvalid = true
+    newWord.focus()
+    return
+  }
+
+  return true
+}
+
+newWord.addEventListener('input', (e) => {
+  if(newWord.value.length == 0) {
+    newWord.ariaInvalid = false
+    inputError.textContent = ''
+  }
+})
 
 startInteraction()
 
@@ -120,8 +170,8 @@ function submitGuess() {
     return word + tile.dataset.letter
   }, "")
 
-  if (!wordDict.includes(guess)) {
-    showAlert(`${guess} Not in word list`)
+  if (!wordValid(guess)) {
+    showAlert(`${guess.toUpperCase()} Not in word list`)
     shakeTiles(activeTiles)
     return
   }
@@ -231,3 +281,29 @@ function danceTiles(tiles) {
     }, (index * DANCE_ANIMATION_DURATION) / 5)
   })
 }
+
+class modalBtn extends HTMLElement {
+	constructor() {
+		super();
+
+		const btn = this.querySelector('button');
+		const dialogId = btn.getAttribute('commandfor');
+
+		// change button in dialog to form element
+		const dialog = document.querySelector(`#${dialogId}`);
+		const btnClose = dialog.querySelector('[command="close"]');
+    btnClose.type = 'submit';
+
+		btn.addEventListener('click', () => {
+			dialog.showModal();
+		});
+	}
+}
+
+// progressively enhance in browsers that don't support command/commandfor
+const cmdTest = document.createElement('button');
+// null in browsers that support, undefined in others
+if (cmdTest.commandForElement !== null) {
+	customElements.define("modal-btn", modalBtn);
+}
+cmdTest.remove();
