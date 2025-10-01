@@ -20,7 +20,7 @@ if(params.get(paramName)) {
   targetWord = atob(params.get(paramName)).split(paramName)[0]
 }
 else {
-  location.assign(`${location.origin}/?${paramName}=${btoa(targetWord)}`)
+  location.assign(`${location.origin}${location.pathname}?${paramName}=${btoa(targetWord)}`)
 }
 
 const newGame = document.getElementById('newgame')
@@ -36,7 +36,7 @@ newGame.addEventListener('formdata', (e) => {
   const entry = e.formData.get('newword')
   if (validateWord(entry)) {
     const word = btoa(entry)
-    const urlBase = `${location.origin}/?${paramName}=${word}`
+    const urlBase = `${location.origin}${location.pathname}?${paramName}=${word}`
     const linkContainer = document.querySelector('.newpuzzle')
     const puzzleLink = document.querySelector('.newpuzzle > a[href]')
     puzzleLink.href = urlBase;
