@@ -11,10 +11,12 @@ const FLIP_ANIMATION_DURATION = 500
 const DANCE_ANIMATION_DURATION = 500
 const keyboard = document.querySelector("[data-keyboard]")
 const alertContainer = document.querySelector("[data-alert-container]")
+const alertLiveRegion = document.querySelector("[data-alert-live-region]")
 const guessGrid = document.querySelector("[data-guess-grid]")
 
 const params = new URLSearchParams(document.location.search)
 const paramName = 'game'
+let buildAlert = ""
 let targetWord = 'zyzgy'
 let baseURL = 'https://harvard-das.github.io/wordle-clone-a11y/'
 
@@ -149,9 +151,9 @@ function handleKeyPress(e) {
 function pressKey(key) {
   const activeTiles = getActiveTiles()
   if (activeTiles.length >= WORD_LENGTH) return
-  const nextTile = guessGrid.querySelector(":not([data-letter])")
+  const nextTile = guessGrid.querySelector("div:not([data-letter])")
   nextTile.dataset.letter = key.toLowerCase()
-  nextTile.textContent = key
+  nextTile.querySelector("span").textContent = key
   nextTile.dataset.state = "active"
 }
 
@@ -159,7 +161,7 @@ function deleteKey() {
   const activeTiles = getActiveTiles()
   const lastTile = activeTiles[activeTiles.length - 1]
   if (lastTile == null) return
-  lastTile.textContent = ""
+  lastTile.querySelector("span").textContent = ""
   delete lastTile.dataset.state
   delete lastTile.dataset.letter
 }
@@ -183,12 +185,16 @@ function submitGuess() {
   }
 
   stopInteraction()
+  buildAlert = `${guess}. `
   activeTiles.forEach((...params) => flipTile(...params, guess))
 }
 
 function flipTile(tile, index, array, guess) {
   const letter = tile.dataset.letter
   const key = keyboard.querySelector(`[data-key="${letter}"i]`)
+  const correctMessage = "correct"
+  const presentMessage = "present"
+  const absentMessage = "absent"
   setTimeout(() => {
     tile.classList.add("flip")
   }, (index * FLIP_ANIMATION_DURATION) / 2)
@@ -199,19 +205,25 @@ function flipTile(tile, index, array, guess) {
       tile.classList.remove("flip")
       if (targetWord[index] === letter) {
         tile.dataset.state = "correct"
+        tile.querySelector('.vh').textContent = correctMessage
         key.classList.add("correct")
-        key.querySelector('.vh').textContent = "correct"
+        key.querySelector('.vh').textContent = correctMessage
       } else if (targetWord.includes(letter)) {
         tile.dataset.state = "wrong-location"
+        tile.querySelector('.vh').textContent = presentMessage
         key.classList.add("wrong-location")
-        key.querySelector('.vh').textContent = "present"
+        key.querySelector('.vh').textContent = presentMessage
       } else {
         tile.dataset.state = "wrong"
+        tile.querySelector('.vh').textContent = absentMessage
         key.classList.add("wrong")
-        key.querySelector('.vh').textContent = "absent"
+        key.querySelector('.vh').textContent = absentMessage
       }
 
+      buildAlert = buildAlertLive(tile.textContent)
+
       if (index === array.length - 1) {
+        buildAlert = buildAlertLive(`${tile.textContent}`)
         tile.addEventListener(
           "transitionend",
           () => {
@@ -220,6 +232,9 @@ function flipTile(tile, index, array, guess) {
           },
           { once: true }
         )
+      }
+      else {
+        buildAlert = buildAlertLive(`${tile.textContent}, `)
       }
     },
     { once: true }
@@ -230,7 +245,8 @@ function getActiveTiles() {
   return guessGrid.querySelectorAll('[data-state="active"]')
 }
 
-function showAlert(message, duration = 1000) {
+function showAlert(message, duration = 2000) {
+  alertLive(message, duration)
   const alert = document.createElement("div")
   alert.textContent = message
   alert.classList.add("alert")
@@ -242,6 +258,21 @@ function showAlert(message, duration = 1000) {
     alert.addEventListener("transitionend", () => {
       alert.remove()
     })
+  }, duration)
+}
+
+function buildAlertLive(message) {
+  return buildAlert.concat(` ${message}`)
+}
+
+function alertLive(message, duration = 1000) {
+  const alertLive = document.createElement("div")
+  alertLive.textContent = message
+  alertLiveRegion.prepend(alertLive)
+  if (duration == null) return
+
+  setTimeout(() => {
+      alertLive.remove()
   }, duration)
 }
 
@@ -270,7 +301,10 @@ function checkWinLose(guess, tiles) {
   if (remainingTiles.length === 0) {
     showAlert(targetWord.toUpperCase(), null)
     stopInteraction()
+    return
   }
+
+  alertLive(buildAlert)
 }
 
 function danceTiles(tiles) {
