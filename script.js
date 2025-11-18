@@ -203,27 +203,27 @@ function flipTile(tile, index, array, guess) {
     "transitionend",
     () => {
       tile.classList.remove("flip")
+      tile.querySelector('span').ariaHidden = true
       if (targetWord[index] === letter) {
+        const messageLetter = tile.dataset.letter.toUpperCase()
         tile.dataset.state = "correct"
-        tile.querySelector('.vh').textContent = correctMessage
+        tile.querySelector('.state').textContent = `${messageLetter} ${correctMessage}`
         key.classList.add("correct")
-        key.querySelector('.vh').textContent = correctMessage
+        key.querySelector('.vh').textContent = `${correctMessage}`
       } else if (targetWord.includes(letter)) {
         tile.dataset.state = "wrong-location"
-        tile.querySelector('.vh').textContent = presentMessage
+        tile.querySelector('.state').textContent = `${messageLetter} ${presentMessage}`
         key.classList.add("wrong-location")
-        key.querySelector('.vh').textContent = presentMessage
+        key.querySelector('.vh').textContent = `${presentMessage}`
       } else {
         tile.dataset.state = "wrong"
-        tile.querySelector('.vh').textContent = absentMessage
+        tile.querySelector('.state').textContent = `${messageLetter} ${absentMessage}`
         key.classList.add("wrong")
-        key.querySelector('.vh').textContent = absentMessage
+        key.querySelector('.vh').textContent = `${absentMessage}`
       }
 
-      buildAlert = buildAlertLive(tile.textContent)
-
       if (index === array.length - 1) {
-        buildAlert = buildAlertLive(`${tile.textContent}`)
+        buildAlert = buildAlertLive(`${tile.querySelector('.state').textContent}`)
         tile.addEventListener(
           "transitionend",
           () => {
@@ -234,7 +234,7 @@ function flipTile(tile, index, array, guess) {
         )
       }
       else {
-        buildAlert = buildAlertLive(`${tile.textContent}, `)
+        buildAlert = buildAlertLive(`${tile.querySelector('.state').textContent}, `)
       }
     },
     { once: true }
