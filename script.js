@@ -41,7 +41,7 @@ newGame.addEventListener('submit', (e) => {
 })
 
 newGame.addEventListener('formdata', (e) => {
-  const entry = e.formData.get('newword')
+  const entry = e.formData.get('newword').toLowerCase()
   if (validateWord(entry)) {
     const word = btoa(entry)
     const puzzleURL = `${baseURL}?${paramName}=${word}`
