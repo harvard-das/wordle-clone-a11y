@@ -191,6 +191,7 @@ function submitGuess() {
 
 function flipTile(tile, index, array, guess) {
   const letter = tile.dataset.letter
+  const messageLetter = tile.dataset.letter.toUpperCase()
   const key = keyboard.querySelector(`[data-key="${letter}"i]`)
   const correctMessage = "correct"
   const presentMessage = "present"
@@ -205,7 +206,6 @@ function flipTile(tile, index, array, guess) {
       tile.classList.remove("flip")
       tile.querySelector('span').ariaHidden = true
       if (targetWord[index] === letter) {
-        const messageLetter = tile.dataset.letter.toUpperCase()
         tile.dataset.state = "correct"
         tile.querySelector('.state').textContent = `${messageLetter} ${correctMessage}`
         key.classList.add("correct")
