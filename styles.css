@@ -21,7 +21,7 @@ body {
   gap: .5rem;
   height: 100svh;
   margin: 0;
-  padding: .25rem;
+  padding-inline: .25rem;
   font-size: clamp(.5rem, 4.5vmin, 1.5rem);
 }
 
@@ -88,6 +88,8 @@ main {
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap:.5rem;
+  justify-content: space-between;
 }
 
 .keyboard {
@@ -134,14 +136,15 @@ main {
 }
 
 .guess-grid {
+  --tile-max: 100px;
+  --tile-min: 16vw;
   display: grid;
   justify-content: center;
   align-content: center;
   flex-grow: 1;
-  grid-template-columns: repeat(5, min(100px, 16vw));
-  grid-template-rows: repeat(6, min(100px, 16vw));
+  grid-template-columns: repeat(5, min(var(--tile-max), var(--tile-min)));
+  grid-template-rows: repeat(6, min(var(--tile-max), var(--tile-min)));
   gap: .25em;
-  margin-bottom: 1em;
 }
 
 .tile {
