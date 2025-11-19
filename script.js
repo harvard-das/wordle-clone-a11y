@@ -186,16 +186,56 @@ function submitGuess() {
 
   stopInteraction()
   buildAlert = `${guess}. `
-  activeTiles.forEach((...params) => flipTile(...params, guess))
+
+  // Calculate states for all tiles before flipping
+  const tileStates = calculateTileStates(guess, targetWord)
+
+  activeTiles.forEach((...params) => flipTile(...params, guess, tileStates))
 }
 
-function flipTile(tile, index, array, guess) {
+
+// Calculate the state of each tile
+function calculateTileStates(guess, target) {
+  const states = Array(WORD_LENGTH).fill('absent')
+  const targetLetters = target.split('')
+  const guessLetters = guess.split('')
+  
+  // Count available letters in target
+  const letterCount = {}
+  for (let letter of targetLetters) {
+    letterCount[letter] = (letterCount[letter] || 0) + 1
+  }
+
+  // First pass: Mark correct positions
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    if (guessLetters[i] === targetLetters[i]) {
+      states[i] = 'correct'
+      letterCount[guessLetters[i]]--
+    }
+  }
+  
+  // Second pass: Mark present letters (wrong position)
+  for (let i = 0; i < WORD_LENGTH; i++) {
+    if (states[i] === 'correct') continue
+    
+    const letter = guessLetters[i]
+    if (letterCount[letter] > 0) {
+      states[i] = 'wrong-location'
+      letterCount[letter]--
+    }
+  }
+  
+  return states
+}
+
+function flipTile(tile, index, array, guess, tileStates) {
   const letter = tile.dataset.letter
   const messageLetter = tile.dataset.letter.toUpperCase()
   const key = keyboard.querySelector(`[data-key="${letter}"i]`)
   const correctMessage = "correct"
   const presentMessage = "present"
   const absentMessage = "absent"
+  
   setTimeout(() => {
     tile.classList.add("flip")
   }, (index * FLIP_ANIMATION_DURATION) / 2)
@@ -205,12 +245,15 @@ function flipTile(tile, index, array, guess) {
     () => {
       tile.classList.remove("flip")
       tile.querySelector('span').ariaHidden = true
-      if (targetWord[index] === letter) {
+      
+      const state = tileStates[index]
+      
+      if (state === "correct") {
         tile.dataset.state = "correct"
         tile.querySelector('.state').textContent = `${messageLetter} ${correctMessage}`
         key.classList.add("correct")
         key.querySelector('.vh').textContent = `${correctMessage}`
-      } else if (targetWord.includes(letter)) {
+      } else if (state === "wrong-location") {
         tile.dataset.state = "wrong-location"
         tile.querySelector('.state').textContent = `${messageLetter} ${presentMessage}`
         key.classList.add("wrong-location")
