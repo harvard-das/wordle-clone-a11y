@@ -150,7 +150,7 @@ main {
 .tile {
   font-size: 2em;
   color: var(--canvas-text);;
-  border: .05em dotted var(--tile-border);
+  border: clamp(2px, .05em, 4px) dotted var(--tile-border);
   text-transform: uppercase;
   font-weight: bold;
   display: flex;
@@ -176,19 +176,21 @@ main {
   border-width: 3px;
 }
 
+.tile[data-state="correct"] {
+  border-color: inherit;
+  border-style: solid;
+  background-color: var(--correct);
+}
+
 .tile[data-state="wrong"] {
-  border: none;
+  border-style: solid;
   background-color: var(--wrong);
 }
 
 .tile[data-state="wrong-location"] {
-  border: 2px dashed;
+  border-color: inherit;
+  border-style: dashed;
   background-color: var(--wrong-location);
-}
-
-.tile[data-state="correct"] {
-  border: 2px solid;
-  background-color: var(--correct);
 }
 
 .tile.shake {
